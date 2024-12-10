@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Logo from '../assets/logo.png'
 
 export default function Header() {
-    const [navLinkClick, setNavLinkClick] = useState('Home')
+    const [navLinkClick, setNavLinkClick] = useState('')
     const [isNavCollapse, setIsNavCollapse] = useState(false)
 
     useEffect(()=>{
@@ -41,7 +41,7 @@ export default function Header() {
         <div className='flex gap-6'>
             <button className='hidden sm:block border-2
              border-gray-700 border-opacity-10 px-3 py-1 rounded-lg text-lg'><i className="fa-solid fa-sun"></i></button>
-            <button className='bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg '>Sign In</button>
+            <button className='bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg '><Link to='/sign-in'>Sign In</Link></button>
 
             {/* hamburger menu  */}
 

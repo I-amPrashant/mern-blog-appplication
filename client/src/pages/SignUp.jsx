@@ -61,12 +61,12 @@ export default function SignUp() {
 
           <div className='flex flex-col gap-2'>
             <label htmlFor="email" className='font-bold text-xl'>Your email</label>
-            <input type="text" name="email" id="email" className='border border-gray-400 border-opacity-50 rounded-xl px-3 py-2 outline-none ' placeholder='name@gmail.com'  onChange={(e)=>handleChange(e)}/>
+            <input type="email" name="email" id="email" className='border border-gray-400 border-opacity-50 rounded-xl px-3 py-2 outline-none ' placeholder='name@gmail.com'  onChange={(e)=>handleChange(e)}/>
           </div>
 
           <div className='flex flex-col gap-2'>
             <label htmlFor="password" className='font-bold text-xl'>Your password</label>
-            <input type="text" name="password" id="password" className='border border-gray-400 border-opacity-50 rounded-xl px-3 py-2 outline-none ' placeholder='password'  onChange={(e)=>handleChange(e)}/>
+            <input type="password" name="password" id="password" className='border border-gray-400 border-opacity-50 rounded-xl px-3 py-2 outline-none ' placeholder='password'  onChange={(e)=>handleChange(e)}/>
           </div>
 
           <div className='flex flex-col gap-2'>
