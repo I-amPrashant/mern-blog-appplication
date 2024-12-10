@@ -14,7 +14,7 @@ export default function Header() {
 
   return (
     // header Component
-    <div className={`overflow-hidden border-b-[2px] duration-200 ease-in-out h-[100px] ${isNavCollapse && 'h-[250px]'}`}>
+    <div className={`overflow-hidden border-b-[2px] duration-300 ease-in-out h-[100px] ${isNavCollapse && 'h-[250px]'}`}>
         <div className={`relative flex py-8 px-2 sm:px-4 md:px-8 justify-between items-center max-w-[1400px] mx-auto`}>
 
        {/* logo  */}
