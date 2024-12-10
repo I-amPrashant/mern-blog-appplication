@@ -77,7 +77,7 @@ export default function SignUp() {
             {/* error message  */}
             <div className='text-red-500 font-semibold text-center'>{errorMessage}</div>
       </form>
-      <div className='mt-5 font-semibold'>Have an account? <Link to='/sign-in' className='text-blue-500 cursor-pointer'>Sign In</Link></div>
+      <div className='mt-5 font-semibold'>Already Have an account? <Link to='/sign-in' className='text-blue-500 cursor-pointer'>Sign In</Link></div>
       </div>
     </div>
   )
