@@ -97,7 +97,7 @@ export default function Header() {
             ) : (
               <div className="relative flex justify-center items-center">
                 <button
-                  className="rounded-full overflow-hidden h-9 w-9 "
+                  className="rounded-full overflow-hidden h-9 w-9 " 
                   onClick={() => setDropDownActive(!dropDownActive)}
                 >
                   <img
@@ -123,7 +123,7 @@ export default function Header() {
 
       {/* dropdown items  */}
       <div className={`${dropDownActive?'block':'hidden'} absolute top-20 right-20 px-6 py-4 bg-white border-[.5px] border-opacity-50 rounded-xl
-       border-gray-400 flex flex-col gap-4`}>
+       border-gray-400 flex flex-col gap-4 text-gray-900`}>
             <Link to='/dashboard?tab=profile' onClick={() => setDropDownActive(false)}>Profile</Link>
             <button className="text-red-500" onClick={()=>setDropDownActive(false)}>Logout</button>
       </div>
