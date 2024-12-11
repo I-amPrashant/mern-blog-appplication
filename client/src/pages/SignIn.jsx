@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {signInStart, signInSuccess, signInFailure} from '../user/userSlice'
 import {useDispatch, useSelector} from 'react-redux'
+import OAuth from '../components/OAuth'
 
 export default function SignIn() {
   const [formData, setFormData] = useState({})
@@ -66,6 +67,9 @@ export default function SignIn() {
            <button type='submit' className='bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl
            px-3 py-2' onClick={(e)=>handleSubmit(e)} disabled={loading}>{loading?'Loading...':'Sign Up'} </button>
           </div>
+
+          {/* google signin  */}
+          <OAuth/>
 
             {/* error message  */}
             <div className='text-red-500 font-semibold text-center'>{errorMessage}</div>
