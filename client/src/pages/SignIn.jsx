@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import {signInStart, signInSuccess, signInFailure} from '../user/userSlice'
+import {signInStart, signInSuccess, signInFailure, navigation} from '../user/userSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import OAuth from '../components/OAuth'
 
@@ -17,7 +17,6 @@ export default function SignIn() {
 
   const handleSubmit=async (e)=>{
     e.preventDefault();
-    
     if(!formData.email || !formData.password){
       return dispatch(signInFailure('All fields are required'));
     }
@@ -75,7 +74,7 @@ export default function SignIn() {
             {/* error message  */}
             <div className='text-red-500 font-semibold text-center'>{errorMessage}</div>
       </form>
-      <div className='mt-5 font-semibold'>Don't have an account? <Link to='/sign-up' className='text-blue-500 cursor-pointer'>Sign Up</Link></div>
+      <div className='mt-5 font-semibold'>Don't have an account? <Link to='/sign-up' className='text-blue-500 cursor-pointer' onClick={()=>dispatch(navigation())}>Sign Up</Link></div>
       </div>
     </div>
   )

@@ -10,7 +10,8 @@ export default function OAuth() {
     const navigate=useNavigate();
 
     const auth=getAuth(app);
-    const handleClick=async ()=>{
+    const handleClick=async (e)=>{
+        e.stopPropagation();
         const provider=new GoogleAuthProvider();
         provider.setCustomParameters({prompt:'select_account'});
 
@@ -27,7 +28,6 @@ export default function OAuth() {
             });
 
             const data=await res.json();
-            console.log(data)
             if(res.ok){
                 dispatch(signInSuccess(data));
                 return navigate('/');
@@ -38,6 +38,6 @@ export default function OAuth() {
         }
     }
   return (
-        <button className='bg-gradient-to-r from-blue-500 to-cyan-500 text-white w-full py-3 rounded-xl text-center' onClick={()=>handleClick()}>&nbsp;<i className='fa-brands fa-google'></i> Continue with Google</button>
+        <button className='bg-gradient-to-r from-blue-500 to-cyan-500 text-white w-full py-3 rounded-xl text-center' onClick={(e)=>handleClick(e)}>&nbsp;<i className='fa-brands fa-google'></i> Continue with Google</button>
   )
 }

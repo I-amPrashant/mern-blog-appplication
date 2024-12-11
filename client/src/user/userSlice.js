@@ -9,6 +9,10 @@ const initialState={
     name:'user',
     initialState,
     reducers:{
+        navigation:(state)=>{
+            state.loading=false,
+            state.error=false
+        },
         signInStart:(state)=>{
             state.loading=true,
             state.error=false
@@ -26,6 +30,6 @@ const initialState={
     }
 })
 
-export const {signInStart, signInSuccess, signInFailure}=userSlice.actions;
+export const {signInStart, signInSuccess, signInFailure, navigation}=userSlice.actions;
 
 export default userSlice.reducer;
