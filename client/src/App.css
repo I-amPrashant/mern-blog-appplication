@@ -21,6 +21,8 @@ body, html{
 }
 #root {
   margin: 0 auto;
+  height: 100vh;
   overflow-x: hidden;
+  position: relative;
 }
 

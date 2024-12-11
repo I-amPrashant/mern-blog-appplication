@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
   const [navLinkClick, setNavLinkClick] = useState("");
   const [isNavCollapse, setIsNavCollapse] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const [dropDownActive, setDropDownActive] = useState(false);
+  const [darkActive, setDarkActive] = useState(false);
+  const dispatch=useDispatch();
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -37,7 +40,7 @@ export default function Header() {
             <input
               type="text"
               id="search"
-              className="hidden sm:block outline-none border-none "
+              className="hidden sm:block outline-none border-none bg-transparent"
               placeholder="Search..."
             />
             <label htmlFor="search">
@@ -80,8 +83,11 @@ export default function Header() {
             <button
               className="hidden sm:block border-2
              border-gray-700 border-opacity-10 px-3 py-1 rounded-lg text-lg"
-            >
-              <i className="fa-solid fa-sun"></i>
+             onClick={()=>{
+              setDarkActive(!darkActive);
+              dispatch(toggleTheme());
+             }}>
+              <i className={`fa-solid fa-${darkActive ? "sun" : "moon"}`}></i>
             </button>
 
             {!currentUser ? (

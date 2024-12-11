@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import {signInStart, signInSuccess, signInFailure, navigation} from '../user/userSlice'
+import {signInStart, signInSuccess, signInFailure, navigation} from '../redux/user/userSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import OAuth from '../components/OAuth'
 
