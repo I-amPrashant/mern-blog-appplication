@@ -26,10 +26,22 @@ const initialState={
             state.loading=false,
             state.error=action.payload
         },
-
+        updateStart:(state)=>{
+            state.loading=true,
+            state.error=false
+        },
+        updateSuccess:(state, action)=>{
+            state.currentUser=action.payload,
+            state.loading=false,
+            state.error=false
+        },
+        updateFailure:(state, action)=>{
+            state.loading=false,
+            state.error=action.payload
+        },
     }
 })
 
-export const {signInStart, signInSuccess, signInFailure, navigation}=userSlice.actions;
+export const {signInStart, signInSuccess, signInFailure, navigation, updateStart, updateSuccess, updateFailure}=userSlice.actions;
 
 export default userSlice.reducer;

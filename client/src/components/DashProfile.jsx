@@ -1,8 +1,52 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {updateStart, updateSuccess, updateFailure} from '../redux/user/userSlice'
+
 
 export default function DashProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser} = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({});
+  const [userUpdateSuccess, setUserUpdateSuccess] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const dispatch=useDispatch();
+
+  const handleFormChange=(e)=>{
+    setErrorMessage('');
+    setUserUpdateSuccess('');
+    setFormData({...formData, [e.target.id]:e.target.value});
+  }
+
+  const handleSubmit=async (e)=>{
+    e.preventDefault();
+    if(Object.keys(formData).length===0){
+      return
+    }
+
+    try{
+      dispatch(updateStart());
+
+      const res=await fetch(`/api/user/update/${currentUser.validUser._id}`, {
+        method:"PUT",
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(formData),
+      })
+
+      const data=await res.json();
+
+      if(!res.ok){
+         dispatch(updateFailure(data.message));
+         setErrorMessage(data.message);
+      }else{
+        dispatch(updateSuccess(data));
+        setUserUpdateSuccess('user updated successfully')
+      }
+
+    }catch(err){
+      dispatch(updateFailure(err.message));
+      setErrorMessage(err.message);
+    }
+    
+  }
 
   return (
     <div className="flex flex-grow justify-center items-center px-4 py-6">
@@ -27,7 +71,7 @@ export default function DashProfile() {
             placeholder="Username"
             className="bg-gray-200 text-black px-4 py-2 rounded-lg w-full outline-none "
             defaultValue={currentUser.validUser.username}
-            
+            onChange={(e)=>handleFormChange(e)}
           />
           <input
             type="email"
@@ -35,17 +79,24 @@ export default function DashProfile() {
             placeholder="email"
             className="bg-gray-200 text-black px-4 py-2 rounded-lg w-full outline-none "
             defaultValue={currentUser.validUser.email}
-            
+            onChange={(e)=>handleFormChange(e)}
+            readOnly
           />
           <input
             type="password"
             id="password"
             placeholder="password"
             className="bg-gray-200 text-black px-4 py-2 rounded-lg w-full outline-none "
+            onChange={(e)=>handleFormChange(e)}
           />
 
-          <button type='submit' className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg">Update</button>
+          <button type='submit' onClick={(e)=>handleSubmit(e)} className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg">Update</button>
         </form>
+        {errorMessage && <div className="w-full text-black bg-red-200 px-4 py-2 rounded-lg">{
+          errorMessage}</div>}
+
+        {userUpdateSuccess && <div className="w-full text-black bg-green-200 px-4 py-2 rounded-lg">{
+          userUpdateSuccess}</div>}
 
         <div className="w-full font-semibold flex justify-between text-red-500">
             <button>Delete Account</button>
