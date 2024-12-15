@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { useSelector, useDispatch } from "react-redux";
+import { signoutSuccess } from "../redux/user/userSlice";
 import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
@@ -11,12 +12,32 @@ export default function Header() {
   const [dropDownActive, setDropDownActive] = useState(false);
   const [darkActive, setDarkActive] = useState(false);
   const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   useEffect(() => {
     window.addEventListener("resize", () => {
       setIsNavCollapse(false);
     });
   }, []);
+
+    const handleSignOut=async()=>{
+      setDropDownActive(false);
+      try{
+        const res=await fetch(`/api/user/signout`, {
+          method:"POST",
+        });
+  
+        const data=await res.json();
+        if(!res.ok){
+          console.log(data.message)
+        }else{
+          dispatch(signoutSuccess());
+          navigate('/sign-in')
+        }
+      }catch(err){
+        console.log(err.message)
+      }
+    }
 
   return (
     <div className="relative">
@@ -125,7 +146,7 @@ export default function Header() {
       <div className={`${dropDownActive?'block':'hidden'} absolute top-20 right-20 px-6 py-4 bg-white border-[.5px] border-opacity-50 rounded-xl
        border-gray-400 flex flex-col gap-4 text-gray-900`}>
             <Link to='/dashboard?tab=profile' onClick={() => setDropDownActive(false)}>Profile</Link>
-            <button className="text-red-500" onClick={()=>setDropDownActive(false)}>Logout</button>
+            <button className="text-red-500" onClick={()=>handleSignOut()}>Logout</button>
       </div>
     </div>
   );

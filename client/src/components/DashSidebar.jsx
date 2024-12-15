@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation,useNavigate } from "react-router-dom";
+import { signoutSuccess } from "../redux/user/userSlice";
+
 
 export default function DashSidebar() {
   const { theme } = useSelector((state) => state.theme);
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -15,6 +19,25 @@ export default function DashSidebar() {
       setTab(tabFromUrl);
     }
   }, [location.search]);
+
+    const handleSignOut=async()=>{
+      try{
+        const res=await fetch(`/api/user/signout`, {
+          method:"POST",
+        });
+  
+        const data=await res.json();
+        if(!res.ok){
+          console.log(data.message)
+        }else{
+          dispatch(signoutSuccess());
+          navigate('/sign-in')
+        }
+      }catch(err){
+        console.log(err.message)
+      }
+    }
+  
   return (
     <div className={`flex flex-col  gap-4 px-6 py-4 bg-slate-100 ${theme==='dark'?'dark:bg-[#131b30]':''} h-full`}>
       <Link to="/dashboard?tab=profile">
@@ -40,6 +63,7 @@ export default function DashSidebar() {
       <Link>
       <button
         className={`relative text-start w-full hover:bg-gray-200  duration-300 ease-in-out py-2 px-3 rounded-lg text-red-500`}
+        onClick={()=>handleSignOut()}
       >
           {" "}
           <span>
