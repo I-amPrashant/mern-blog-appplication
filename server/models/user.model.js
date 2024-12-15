@@ -19,6 +19,10 @@ const userSchema= new Schema({
         type:String,
         default:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSLU5_eUUGBfxfxRd4IquPiEwLbt4E_6RYMw&s'
     },
+    isAdmin:{
+        type:Boolean,
+        default:false
+    }
 }, {timestamps:true});
 
 export default  mongoose.model("user", userSchema);
