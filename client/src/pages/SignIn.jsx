@@ -65,7 +65,7 @@ export default function SignIn() {
 
           <div className='flex flex-col gap-2'>
            <button type='submit' className='bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl
-           px-3 py-2' onClick={(e)=>handleSubmit(e)} disabled={loading}>{loading?'Loading...':'Sign Up'} </button>
+           px-3 py-2' onClick={(e)=>handleSubmit(e)} disabled={loading}>{loading?'Loading...':'Sign In'} </button>
           </div>
 
           {/* google signin  */}

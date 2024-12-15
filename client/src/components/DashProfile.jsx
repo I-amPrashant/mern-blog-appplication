@@ -1,18 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {updateStart, updateSuccess, updateFailure} from '../redux/user/userSlice'
+import {useNavigate} from "react-router-dom";
+import {updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure} from '../redux/user/userSlice'
 
 
 export default function DashProfile() {
   const { currentUser} = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
-  const [userUpdateSuccess, setUserUpdateSuccess] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
   const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   const handleFormChange=(e)=>{
     setErrorMessage('');
-    setUserUpdateSuccess('');
+    setSuccessMessage('');
     setFormData({...formData, [e.target.id]:e.target.value});
   }
 
@@ -38,7 +41,7 @@ export default function DashProfile() {
          setErrorMessage(data.message);
       }else{
         dispatch(updateSuccess(data));
-        setUserUpdateSuccess('user updated successfully')
+        setSuccessMessage('user updated successfully')
       }
 
     }catch(err){
@@ -48,7 +51,33 @@ export default function DashProfile() {
     
   }
 
+
+  const handleDeleteAccount=async()=>{
+    setModalOpen(false);
+
+    try{
+      dispatch(deleteUserStart());
+      const res=await fetch(`/api/user/delete/${currentUser.validUser._id}`, {
+        method:"DELETE",
+      })
+      const data=await res.json();
+
+      if(!res.ok){
+        dispatch(deleteUserFailure(data.message));
+        setErrorMessage(data.message);
+      }else{
+        dispatch(deleteUserSuccess(data));
+        navigate('/sign-in');
+      }
+
+    }catch(err){
+      setErrorMessage(err.message);
+      dispatch(deleteUserFailure(err.message));
+    }
+
+  }
   return (
+    <>
     <div className="flex flex-grow justify-center items-center px-4 py-6">
       <div className="relative flex flex-col gap-11 items-center min-w-full md:min-w-[450px]">
         <h1 className="font-bold text-3xl">Profile</h1>
@@ -95,14 +124,30 @@ export default function DashProfile() {
         {errorMessage && <div className="w-full text-black bg-red-200 px-4 py-2 rounded-lg">{
           errorMessage}</div>}
 
-        {userUpdateSuccess && <div className="w-full text-black bg-green-200 px-4 py-2 rounded-lg">{
-          userUpdateSuccess}</div>}
+        {successMessage && <div className="w-full text-black bg-green-200 px-4 py-2 rounded-lg">{
+          successMessage}</div>}
 
         <div className="w-full font-semibold flex justify-between text-red-500">
-            <button>Delete Account</button>
-            <button>Log Out</button>
+            <button onClick={()=>setModalOpen(true)}>Delete Account</button>
+            <button >Log Out</button>
         </div>
       </div>
+      <div className={`${modalOpen?'block':'hidden'} absolute z-[150] h-full w-full bg-black left-0 top-0 bg-opacity-70 flex justify-center items-center`}>
+        <div className="relative text-center  bg-white px-10 py-8 rounded-lg max-w-[350px]">
+          
+          {/* icon  */}
+          <div className="text-5xl text-gray-400"><i class="fa-solid fa-circle-exclamation"></i></div>
+
+          <h2 className="mt-8 font-semibold ">Are you sure you want to delete your account?</h2>
+
+          <div className="flex justify-between flex-wrap font-semibold mt-8">
+            <button className="bg-red-600 text-white px-4 py-2 rounded-xl" onClick={()=>handleDeleteAccount()}>Yes I'm sure</button>
+            <button className="border-[1px] px-4 py-2 rounded-xl" onClick={()=>setModalOpen(false)}>No, cancel</button>
+          </div>
+        </div>
+
+      </div>
     </div>
+    </>
   );
 }
