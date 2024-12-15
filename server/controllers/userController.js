@@ -53,3 +53,19 @@ export const updateUser=async(req, res, next)=>{
         next(err);
     }
 }
+
+export const deleteUser=async(req, res, next)=>{
+    if(req.user.id!==req.params.userId){
+        return next(errorHandler(403, "not authorized to delete user"));
+    }
+
+    try{
+        await User.findByIdAndDelete(req.params.userId);
+
+        res.status(200).json({
+            message:"user has been deleted",
+        })
+    }catch(err){
+        next(err);
+    }
+}

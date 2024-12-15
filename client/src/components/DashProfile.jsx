@@ -77,7 +77,7 @@ export default function DashProfile() {
             type="email"
             id="email"
             placeholder="email"
-            className="bg-gray-200 text-black px-4 py-2 rounded-lg w-full outline-none "
+            className="bg-gray-200 text-black px-4 py-2 Pbackgrounrounded-lg w-full outline-none "
             defaultValue={currentUser.validUser.email}
             onChange={(e)=>handleFormChange(e)}
             readOnly
