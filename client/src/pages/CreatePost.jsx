@@ -1,16 +1,34 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-export default function CreatePost() {
 
+export default function CreatePost() {
+  const imageRef=useRef(null);
   const [content, setContent] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState('');
+  const [formData, setFormData] = useState({});
   const handleEditorChange = (content, editor) => {
     setContent(content);
   }
-  console.log(content);
+
+  const handleImageUpload=(e)=>{
+    e.stopPropagation();
+    imageRef.current.click();
+    setImageUploadError('');
+    imageRef.current.removeEventListener('change', ()=>{});
+
+    imageRef.current.addEventListener('change', ()=>{
+      if(imageRef.current.files[0].size>2000000){
+        return setImageUploadError('Image size should be less than 1MB');
+      }
+      setImageFile(imageRef.current.files[0]);
+      setFormData({...formData, image:imageRef.current.files[0]});
+    })
+  }
 
   return (
-    <div className='min-h-screen relative flex flex-col items-center mt-[100px] gap-8 mx-auto max-w-[700px] px-5'>
+    <div className='min-h-screen relative flex flex-col items-center mt-[100px] pb-6 gap-8 mx-auto max-w-[700px] px-5'>
       <h1 className='font-semibold text-4xl'>Create a Post</h1>
       <form action="#" className='flex flex-col gap-4 w-full text-gray-700'>
             <div className='flex gap-4 flex-wrap '>
@@ -25,9 +43,11 @@ export default function CreatePost() {
             </div>
 
       {/* image uploader */}
-            <div className='flex items-center justify-between flex-wrap p-4 border border-dashed border-gray-400'>
-              <input type="file" />
-              <button className='text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg '>Upload Image</button>
+            <div className='flex flex-col items-center flex-wrap p-4 border border-dashed border-gray-400'>
+              <input type="file" accept='image/*' className='hidden ' ref={imageRef}/>
+              <button className='text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg w-fit' onClick={(e)=>handleImageUpload(e)}>Upload Image</button>
+              {imageFile && (<img src={URL.createObjectURL(imageFile)} alt="uploaded-image" className='w-[350px] h-[350px] object-cover mt-10'/>)}
+              {imageUploadError && (<p className='text-red-500 text-2xl mt-4'>{imageUploadError}</p>)}
             </div>
 
             {/* tinymce  */}
