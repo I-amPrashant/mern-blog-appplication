@@ -1,6 +1,14 @@
+import { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
 export default function CreatePost() {
+
+  const [content, setContent] = useState('');
+  const handleEditorChange = (content, editor) => {
+    setContent(content);
+  }
+  console.log(content);
+
   return (
     <div className='min-h-screen relative flex flex-col items-center mt-[100px] gap-8 mx-auto max-w-[700px] px-5'>
       <h1 className='font-semibold text-4xl'>Create a Post</h1>
@@ -30,6 +38,7 @@ export default function CreatePost() {
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
       }}
       initialValue="Welcome to TinyMCE!"
+      onEditorChange={handleEditorChange}
       required
     />
         <button className='w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg '>Create </button>
