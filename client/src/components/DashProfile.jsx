@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   updateStart,
   updateSuccess,
@@ -146,6 +146,10 @@ export default function DashProfile() {
             >
               Update
             </button>
+           {currentUser.validUser.isAdmin && <button className="w-full bg-gradient-to-r from-cyan-500 to-green-500 text-white px-4 py-2 rounded-lg">
+             <Link to='/create-post'>Create a post
+             </Link>
+            </button>}
           </form>
           {errorMessage && (
             <div className="w-full text-black bg-red-200 px-4 py-2 rounded-lg">
