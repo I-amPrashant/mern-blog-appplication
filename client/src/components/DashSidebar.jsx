@@ -7,6 +7,7 @@ import { signoutSuccess } from "../redux/user/userSlice";
 
 export default function DashSidebar() {
   const { theme } = useSelector((state) => state.theme);
+  const {currentUser}=useSelector(state=>state.user);
   const location = useLocation();
   const [tab, setTab] = useState("");
   const dispatch = useDispatch();
@@ -55,10 +56,24 @@ export default function DashSidebar() {
             className="absolute right-2 bg-black text-white text-xs py-1 px-2 rounded-lg
         "
           >
-            User
+            {currentUser.validUser.isAdmin?"admin":"use"}
           </span>
         </button>
       </Link>
+      {currentUser.validUser.isAdmin && (
+      <Link to="/dashboard?tab=posts">
+        <button
+          className={`relative text-start w-full text-black hover:bg-gray-200  ${
+            tab === "posts" && "bg-gray-200"
+          } duration-300 ease-in-out py-2 px-3 rounded-lg`}
+        >
+           <span>
+           <i class="fa-solid fa-pager"></i>
+          </span>{" "}
+          &nbsp; Posts{" "}
+        </button>
+      </Link>
+      )}
 
       <Link>
       <button
