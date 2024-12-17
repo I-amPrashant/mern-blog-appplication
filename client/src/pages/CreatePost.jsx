@@ -37,7 +37,7 @@ export default function CreatePost() {
 
     const imageData = new FormData();
     imageData.append("file", imageFile);
-    imageData.append("upload_preset", "mern-blog");
+    imageData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_PRESET);
     imageData.append("folder", "mern-blog");
 
     const cloudName = "dy7cwxm7n";
