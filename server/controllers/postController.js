@@ -3,8 +3,8 @@ import Post from "../models/post.model.js";
 
 export const createPost = async (req, res, next) => {
   const { title, content } = req.body;
-
   if (!req.user.isAdmin) {
+    console.log('hit')
     return next(errorHandler(401, "unauthorized"));
   }
 

@@ -1,12 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const inputRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [imageUploadError, setImageUploadError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
   const handleEditorChange = (content) => {
     setFormData({ ...formData, content: content });
   };
@@ -14,12 +17,19 @@ export default function CreatePost() {
   useEffect(() => {
     const handleUpload = () => {
       setImageUploadError("");
+      setErrorMessage("");
       setImageFile(inputRef.current.files[0]);
     };
 
-    inputRef.current.addEventListener("change", handleUpload);
+    if(inputRef.current){
+      inputRef.current.addEventListener("change", handleUpload);
+    }
 
-    return () => inputRef.current.removeEventListener("change", handleUpload);
+    return () => {
+      if(inputRef.current){
+        inputRef.current.removeEventListener("change", handleUpload);
+      }
+    };
   }, []);
   const handleImageUpload = async (e) => {
     e.preventDefault();
@@ -58,6 +68,27 @@ export default function CreatePost() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    setErrorMessage("");
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMessage(data.message);
+        return;
+      } else {
+        navigate(`/post/${data.post.slug}`);
+      }
+    } catch (err) {
+      setErrorMessage("something went wrong");
+    }
+  };
 
   return (
     <div className="min-h-screen relative flex flex-col items-center mt-[100px] pb-6 gap-8 mx-auto max-w-[700px] px-5">
@@ -122,9 +153,17 @@ export default function CreatePost() {
           onEditorChange={handleEditorChange}
           required
         />
-        <button className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg ">
+        <button
+          className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg "
+          onClick={(e) => handleSubmit(e)}
+        >
           Create
         </button>
+        {errorMessage && (
+          <p className="text-red-500 bg-red-200 p-2 rounded-xl text-center">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </div>
   );
