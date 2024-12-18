@@ -68,13 +68,13 @@ export default function DashSidebar() {
           } duration-300 ease-in-out py-2 px-3 rounded-lg`}
         >
            <span>
-           <i class="fa-solid fa-pager"></i>
+           <i className="fa-solid fa-pager"></i>
           </span>{" "}
           &nbsp; Posts{" "}
         </button>
       </Link>
       )}
-
+ 
       <Link>
       <button
         className={`relative text-start w-full hover:bg-gray-200  duration-300 ease-in-out py-2 px-3 rounded-lg text-red-500`}
