@@ -4,7 +4,6 @@ import Post from "../models/post.model.js";
 export const createPost = async (req, res, next) => {
   const { title, content } = req.body;
   if (!req.user.isAdmin) {
-    console.log("hit");
     return next(errorHandler(401, "unauthorized"));
   }
 
@@ -91,6 +90,37 @@ export const  deletePost=async(req, res, next)=>{
     await Post.findByIdAndDelete(postId);
     res.status(200).json({
       message:"post has been deleted",
+    })
+  }catch(err){
+    next(err);
+  }
+}
+
+export const updatePost=async(req, res, next)=>{
+  const {userId, postId}=req.params;
+  const {title, content}=req.body;
+
+  if(!req.user.isAdmin || req.user.id!==userId){
+    return next(errorHandler(401, "unauthorized"));
+  }
+
+  if (!title || !content || title === "" || content === "") {
+    return next(errorHandler(400, "Fill in the required fields"));
+  }
+
+  try{
+    const updatedPost=await Post.findByIdAndUpdate(postId,{
+      $set:{
+        title:req.body.title,
+        content:req.body.content,
+        category:req.body.category,
+        image:req.body.image,
+      }
+    }, {new:true});
+
+    res.status(200).json({
+      message:"post has been updated",
+      post:updatedPost
     })
   }catch(err){
     next(err);

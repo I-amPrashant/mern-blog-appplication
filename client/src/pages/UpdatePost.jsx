@@ -1,17 +1,42 @@
 import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {useSelector} from 'react-redux'
 
-export default function CreatePost() {
+export default function UpdatePost() {
   const inputRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [imageUploadError, setImageUploadError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
-    content:''
+    title: "",
+    category: "",
+    content: "",
+    image: "",
   });
+  const {currentUser}=useSelector(state=>state.user);
   const navigate = useNavigate();
+  const { postId } = useParams();
+
+  useEffect(() => {
+    setErrorMessage("");
+    try {
+      const fetchPost = async () => {
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.log(data.message);
+          setErrorMessage(data.message);
+        } else {
+          setFormData(data.posts[0]);
+        }
+      };
+      fetchPost();
+    } catch (err) {}
+  }, [postId]);
+
   const handleEditorChange = (content) => {
     setFormData({ ...formData, content: content });
   };
@@ -23,16 +48,17 @@ export default function CreatePost() {
       setImageFile(inputRef.current.files[0]);
     };
 
-    if(inputRef.current){
+    if (inputRef.current) {
       inputRef.current.addEventListener("change", handleUpload);
     }
 
     return () => {
-      if(inputRef.current){
+      if (inputRef.current) {
         inputRef.current.removeEventListener("change", handleUpload);
       }
     };
   }, []);
+
   const handleImageUpload = async (e) => {
     e.preventDefault();
     setImageUploadError("");
@@ -74,8 +100,8 @@ export default function CreatePost() {
     setErrorMessage("");
     e.preventDefault();
     try {
-      const res = await fetch("/api/post/create", {
-        method: "POST",
+      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser.validUser._id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
@@ -94,7 +120,7 @@ export default function CreatePost() {
 
   return (
     <div className="min-h-screen relative flex flex-col items-center mt-[100px] pb-6 gap-8 mx-auto max-w-[700px] px-5">
-      <h1 className="font-semibold text-4xl">Create a Post</h1>
+      <h1 className="font-semibold text-4xl">Update a Post</h1>
       <form action="#" className="flex flex-col gap-4 w-full text-gray-700">
         <div className="flex gap-4 flex-wrap ">
           <input
@@ -104,6 +130,7 @@ export default function CreatePost() {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
+            value={formData.title}
           />
           <select
             name="category"
@@ -113,6 +140,7 @@ export default function CreatePost() {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
+            value={formData.category}
           >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Javascript</option>
@@ -159,7 +187,7 @@ export default function CreatePost() {
           className="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 rounded-lg "
           onClick={(e) => handleSubmit(e)}
         >
-          Create
+          Update
         </button>
         {errorMessage && (
           <p className="text-red-500 bg-red-200 p-2 rounded-xl text-center">

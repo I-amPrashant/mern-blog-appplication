@@ -56,23 +56,26 @@ export default function DashPost() {
     }
   };
 
-  const handlePostDelete=async(postId)=>{
-    try{
-    const res=await fetch(`/api/post/deletepost/${postId}/${currentUser.validUser._id}`, {
-      method:"DELETE",
-    })
+  const handlePostDelete = async (postId) => {
+    try {
+      const res = await fetch(
+        `/api/post/deletepost/${postId}/${currentUser.validUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    const data=await res.json();
-    if(!res.ok){
-      console.log(data.message)
-    }else{
-      alert('post has been deleted')
-      setPosts(posts.filter(post=>post._id!==postId))
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        alert("post has been deleted");
+        setPosts(posts.filter((post) => post._id !== postId));
+      }
+    } catch (err) {
+      console.log(err.message);
     }
-    }catch(err){
-      console.log(err.message)
-    }
-  }
+  };
   return (
     <div className="flex-grow relative overflow-x-scroll mt-10 md:mt-0">
       {currentUser.validUser.isAdmin && posts.length > 0 ? (
@@ -121,10 +124,15 @@ export default function DashPost() {
                   </td>
                   <td className="px-8 py-4 text-gray-400">{post.category}</td>
                   <td className="px-8 py-4 text-red-500">
-                    <span className="cursor-pointer" onClick={()=>handlePostDelete(post._id)}>Delete</span>
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => handlePostDelete(post._id)}
+                    >
+                      Delete
+                    </span>
                   </td>
                   <td className="px-8 py-4 text-cyan-400">
-                    <Link to={`/update-post/${post.slug}`}>update</Link>
+                    <Link to={`/update-post/${post._id}`}>update</Link>
                   </td>
                 </tr>
               </tbody>
