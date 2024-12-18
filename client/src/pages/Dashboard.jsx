@@ -19,7 +19,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className='flex flex-col md:flex-row min-h-screen'>
+    <div className='flex flex-col md:flex-row min-h-screen max-h-screen'>
       {/* sidebar  */}
         <div className='min-w-[300px]'>
           <DashSidebar/>
