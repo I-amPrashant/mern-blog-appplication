@@ -46,7 +46,7 @@ export default function DashUsers() {
       const data = await res.json();
 
       if (res.ok) {
-        setPosts([...users, ...data.users]);
+        setUsers([...users, ...data.users]);
         if (data.users.length <= 9) {
           setShowMore(false);
         }
@@ -59,7 +59,7 @@ export default function DashUsers() {
   const handleUserDelete = async (userId) => {
     try {
       const res = await fetch(
-        `/api/user/delete/${userId}/${currentUser.validUser._id}`,
+        `/api/user/delete/${userId}`,
         {
           method: "DELETE",
         }
@@ -69,8 +69,8 @@ export default function DashUsers() {
       if (!res.ok) {
         console.log(data.message);
       } else {
-        alert("post has been deleted");
-        setPosts(posts.filter((post) => post._id !== userId));
+        alert("user has been deleted");
+        setUsers(users.filter((user) => user._id !== userId));
       }
     } catch (err) {
       console.log(err.message);
@@ -145,7 +145,7 @@ export default function DashUsers() {
         </>
       ) : (
         <p className="absolute text-4xl font-bold text-gray-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-          No posts found
+          No users found
         </p>
       )}
     </div>
