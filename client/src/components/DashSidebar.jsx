@@ -74,6 +74,21 @@ export default function DashSidebar() {
         </button>
       </Link>
       )}
+
+      {currentUser.validUser.isAdmin && (
+      <Link to="/dashboard?tab=users">
+        <button
+          className={`relative text-start w-full text-black hover:bg-gray-200  ${
+            tab === "users" && "bg-gray-200"
+          } duration-300 ease-in-out py-2 px-3 rounded-lg`}
+        >
+           <span>
+           <i className="fa-solid fa-users"></i>
+          </span>{" "}
+          &nbsp; Users{" "}
+        </button>
+      </Link>
+      )}
  
       <Link>
       <button
