@@ -6,6 +6,7 @@ import connectDb from './database/db.js'
 import userRoutes from './routes/userRoute.js'
 import authRoutes from './routes/authRoute.js'
 import postRoutes from './routes/postRoute.js'
+import commentRoutes from './routes/commentRoute.js'
 import cookieParser from 'cookie-parser'
 
 const app=express();
@@ -20,6 +21,7 @@ connectDb();
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/comment', commentRoutes);
 
 app.use((err, req, res, next)=>{
     const statusCode =err.statusCode || 500;
