@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Comment from "./Comment";
 export default function CommentSection({ postId }) {
@@ -7,6 +7,7 @@ export default function CommentSection({ postId }) {
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [comments, setComments] = useState([]);
+  const navigate=useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +52,33 @@ export default function CommentSection({ postId }) {
     };
     getComments();
   }, [postId]);
+
+  const handleLike=async(commentId)=>{
+    if(!currentUser.validUser){
+        return navigate('/sign-in')
+    }
+    try {
+        const res=await fetch(`/api/comment/likeComment/${commentId}`, {
+            method:"PUT",
+        })
+        const data=await res.json();
+        if(res.ok){
+            setComments(comments.map(comment=>{
+                if(comment._id===commentId){
+                    return {
+                        ...comment,
+                        numberOfLikes:data.comment.numberOfLikes,
+                        liked:data.comment.liked
+                    }
+                }else{
+                    return comment
+                }
+            }));
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
 
   return (
     <div className="max-w-[800px] mx-auto w-full p-1">
@@ -109,7 +137,7 @@ export default function CommentSection({ postId }) {
 
           <div className="my-10 flex flex-col gap-6">
             {comments.map((comment, index) => {
-              return <Comment key={comment._id} comment={comment}/>;
+              return <Comment key={comment._id} comment={comment} onLike={handleLike}/>;
             })}
           </div>
         </div>
