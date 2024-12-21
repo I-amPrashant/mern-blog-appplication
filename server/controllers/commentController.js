@@ -23,3 +23,22 @@ export const createComment=async(req, res, next)=>{
         next(err)
     }
 }
+
+export const getPostComments=async(req, res, next)=>{
+
+    try{
+        const comments=await Comment.find({
+            postId: req.params.postId
+        }).sort({
+            createdAt:-1
+        })
+        if(comments){
+            res.status(200).json({comments})
+        }else{
+            res.status(201).json({message: 'no comments yet'})
+        }
+
+    }catch(err){
+        next(err);
+    }
+}
