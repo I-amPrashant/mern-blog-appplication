@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
@@ -13,6 +13,8 @@ export default function Header() {
   const [darkActive, setDarkActive] = useState(false);
   const dispatch=useDispatch();
   const navigate=useNavigate();
+
+
 
   useEffect(() => {
     window.addEventListener("resize", () => {
