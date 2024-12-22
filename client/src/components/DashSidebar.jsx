@@ -41,6 +41,19 @@ export default function DashSidebar() {
   
   return (
     <div className={`flex flex-col  gap-4 px-6 py-4 bg-slate-100 ${theme==='dark'?'dark:bg-[#131b30]':''} h-full`}>
+      <Link to="/dashboard?tab=dash">
+        <button
+          className={`relative text-start w-full text-black hover:bg-gray-200  ${
+            tab === "dash" && "bg-gray-200"
+          } duration-300 ease-in-out py-2 px-3 rounded-lg`}
+        >
+          {" "}
+          <span>
+            <i className="fa-solid fa-user"></i>
+          </span>{" "}
+          &nbsp; Dashboard{" "}
+        </button>
+      </Link>
       <Link to="/dashboard?tab=profile">
         <button
           className={`relative text-start w-full text-black hover:bg-gray-200  ${
