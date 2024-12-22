@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-export default function Comment({ comment, onLike, onEdit }) {
+export default function Comment({ comment, onLike, onEdit , onDelete}) {
   const [user, setUser] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.content);
@@ -44,6 +44,8 @@ export default function Comment({ comment, onLike, onEdit }) {
             console.log(error.message)
         }
   }
+
+ 
   return (
     <div className="flex p-4 gap-3 border-b">
       <div className="">
@@ -104,6 +106,8 @@ export default function Comment({ comment, onLike, onEdit }) {
               </button>
               {currentUser.validUser &&
                 currentUser.validUser._id === comment.userId && (
+                  <>
+                  
                   <button
                     onClick={handleEdit}
                     type="button"
@@ -111,6 +115,14 @@ export default function Comment({ comment, onLike, onEdit }) {
                   >
                     Edit{" "}
                   </button>
+                  <button
+                    onClick={() => onDelete(comment._id)}
+                    type="button"
+                    className="outline-none border-none hover:text-blue-400 duration-200"
+                  >
+                    Delete{" "}
+                  </button>
+                  </>
                 )}
             </div>
           </>

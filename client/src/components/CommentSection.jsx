@@ -93,6 +93,23 @@ export default function CommentSection({ postId }) {
     }))
   }
 
+  const handleDelete=async(commentId)=>{
+    if(!currentUser.validUser){
+      return navigate('/sign-in')
+    }
+    try {
+        const res=await fetch(`/api/comment/deleteComment/${commentId}`, {
+            method:"DELETE",
+        })
+        const data=await res.json();
+        if(res.ok){
+            setComments(comments.filter(comment=>comment._id!==commentId));
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
+
   return (
     <div className="max-w-[800px] mx-auto w-full p-1">
       {currentUser ? (
@@ -150,7 +167,7 @@ export default function CommentSection({ postId }) {
 
           <div className="my-10 flex flex-col gap-6">
             {comments.map((comment, index) => {
-              return <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit}/>;
+              return <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit} onDelete={handleDelete}/>;
             })}
           </div>
         </div>
