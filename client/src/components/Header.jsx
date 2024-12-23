@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutSuccess } from "../redux/user/userSlice";
@@ -11,9 +11,20 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [dropDownActive, setDropDownActive] = useState(false);
   const [darkActive, setDarkActive] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const location=useLocation();
   const dispatch=useDispatch();
   const navigate=useNavigate();
 
+
+
+useEffect(() => {
+  const urlParams=new URLSearchParams(location.search);
+  const searchTermFromUrl=urlParams.get('searchTerm');
+  if(searchTermFromUrl){
+    setSearchTerm(searchTermFromUrl);
+  }
+}, [location.search]);
 
 
   useEffect(() => {
@@ -41,6 +52,15 @@ export default function Header() {
       }
     }
 
+
+    const handleSubmit=(e)=>{
+      e.preventDefault();
+      const urlParams=new URLSearchParams(location.search)
+      urlParams.set('searchTerm', searchTerm)
+      const searchQuery=urlParams.toString();
+      navigate(`/search?${searchQuery}`);
+    }
+
   return (
     <div className="relative">
       {/* header component */}
@@ -59,17 +79,19 @@ export default function Header() {
           </div>
 
           {/* search  */}
-          <div className="border border-gray-400 rounded-xl flex items-center px-3 py-2">
+          <form onSubmit={(e)=>handleSubmit(e)} className="border border-gray-400 rounded-xl flex items-center px-3 py-2">
             <input
               type="text"
               id="search"
               className="hidden sm:block outline-none border-none bg-transparent"
               placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <label htmlFor="search">
               <i className="fa-solid fa-magnifying-glass"></i>
             </label>
-          </div>
+          </form>
 
           {/* nav links  */}
           <div className="absolute top-[100px] left-4 lg:relative lg:top-0 lg:left-0">
